@@ -1,0 +1,23 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "slack chat",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build --prefix frontend",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slamix/frontend-project-12.git"
+  },
+  "author": "slamix",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/slamix/frontend-project-12/issues"
+  },
+  "homepage": "https://github.com/slamix/frontend-project-12#readme",
+  "dependencies": {
+    "@hexlet/chat-server": "^2.0.4"
+  }
+}
