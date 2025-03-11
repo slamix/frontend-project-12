@@ -1,5 +1,5 @@
 install:
-		npm ci
+		npm ci --prefix frontend
 
 build: install
 		npm run build
