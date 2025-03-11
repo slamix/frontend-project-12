@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/slamix/frontend-project-12#readme",
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.4",
-    "vite": "^6.2.1"
+    "@hexlet/chat-server": "^2.0.4"
   }
 }
