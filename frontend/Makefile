@@ -1,6 +1,11 @@
-build:
-		npm run build
+install:
+	npm ci
 
 start:
-		npx start-server -s ./frontend/build
-		npm run build
+	npm start
+
+build:
+	npm build
+
+lint:
+	npx eslint .
