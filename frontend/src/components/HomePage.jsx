@@ -73,7 +73,7 @@ const HomePage = () => {
           />
         </Col>
         <Col md={9} className="d-flex flex-column p-0">
-          <ChatWindow activeChannel={activeChannel} />
+          <ChatWindow activeChannel={activeChannel} localToken={localToken} />
         </Col>
       </Row>
     </Container>
