@@ -1,27 +1,12 @@
-import React from 'react';
 import { Card } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Form, Button } from 'react-bootstrap';
-import { useFormik } from 'formik';
+import MessageForm from './MessageForm.jsx';
 import { getMessages } from '../slices/messagesSlice.js';
-import { addNewMessage } from '../slices/messagesSlice.js';
 
 const ChatWindow = ({ localToken, activeChannel }) => {
   const dispatch = useDispatch();
-
-  const formik = useFormik({
-    initialValues: {
-      message: '',
-    },
-    onSubmit: (values) => {
-      const { message } = values;
-      const username = localStorage.getItem('username');
-      dispatch(addNewMessage({ token: localToken, body: message, channelId: activeChannel.id, username }));
-      formik.resetForm();
-    }
-  });
   
   const messages = useSelector((state) => state.messages.messages);
   const filteredMessages = messages.filter((message) => message.channelId === activeChannel?.id);
@@ -45,24 +30,7 @@ const ChatWindow = ({ localToken, activeChannel }) => {
         </Card.Body>
       </Card>
 
-      {/* <MessageForm localToken={localToken} channelId={activeChannel} /> */}
-      <Form className="p-3 border-top" onSubmit={formik.handleSubmit}>
-      <Form.Group className="d-flex">
-        <Form.Control
-          as="textarea"
-          rows={2}
-          placeholder="Сообщение..."
-          style={{ resize: 'none' }}
-          id="message"
-          name="message"
-          value={formik.values.message}
-          onChange={formik.handleChange}
-        />
-        <Button variant="primary" className="ms-2" type="submit">
-          Отправить
-        </Button>
-      </Form.Group>
-    </Form>
+      <MessageForm localToken={localToken} activeChannel={activeChannel} />
     </>
   );
 };

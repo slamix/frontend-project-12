@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Container, Row, Col, ListGroup, Form, Button, Card, Dropdown } from 'react-bootstrap';
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import axios from "axios";
 import { actions as channelsActions } from '../slices/channelsSlice.js';
-import { actions as authActions } from '../slices/authSlice.js';
+import Header from "./Header.jsx";
 import ChannelsList from "./ChannelsList.jsx";
 import ChatWindow from "./ChatWindow.jsx";
 
@@ -29,7 +29,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const localToken = localStorage.getItem('token');
   const channels = useSelector((state) => state.channels.channels);
-
+  
   const [activeChannel, setActiveChannel] = useState(null);
 
   useEffect(() => {
@@ -49,21 +49,9 @@ const HomePage = () => {
     }
   }, [localToken, navigate, dispatch]);
 
-  const handleLogout = () => {
-    dispatch(authActions.userLogOut());
-    navigate('/login');
-  }
-
   return (
     <Container fluid className="vh-100 d-flex flex-column p-0">
-      <Row className="bg-light border-bottom p-2">
-        <Col className="d-flex justify-content-end">
-          <Button variant="outline-danger" onClick={handleLogout}>
-            Выйти
-          </Button>
-        </Col>
-      </Row>
-
+      <Header />
       <Row className="flex-grow-1">
         <Col md={3} className="bg-light p-3 border-end">
           <ChannelsList
