@@ -4,7 +4,7 @@ install:
 preinstall:
 		npm ci
 
-build: preinstall install
+build: install
 		npm run build
 
 start-frontend:
