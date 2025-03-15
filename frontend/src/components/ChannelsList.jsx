@@ -1,4 +1,3 @@
-import React from 'react';
 import { ListGroup, Button } from 'react-bootstrap';
 
 const ChannelList = ({ channels, activeChannel, onChannelClick }) => {
@@ -26,4 +25,4 @@ const ChannelList = ({ channels, activeChannel, onChannelClick }) => {
   );
 };
 
-export default React.memo(ChannelList);
+export default ChannelList;
