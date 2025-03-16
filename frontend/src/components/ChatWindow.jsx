@@ -24,7 +24,7 @@ const ChatWindow = ({ localToken, activeChannel }) => {
   return (
     <>
       <div className="bg-light border-bottom p-3">
-        <h5 className="mb-0">{activeChannel?.name}</h5>
+        <h5 className="mb-0">{`# ${activeChannel?.name}`}</h5>
       </div>
       <Card className="flex-grow-1 rounded-0 border-0 d-flex flex-column">
         <Card.Body className="overflow-auto" style={{ maxHeight: '79vh' }}>

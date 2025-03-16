@@ -17,7 +17,7 @@ const ChannelList = ({ channels, activeChannel, onChannelClick }) => {
             active={channel.id === activeChannel?.id}
             action
           >
-            {channel.name}
+            {`# ${channel.name}`}
           </ListGroup.Item>
         ))}
       </ListGroup>
