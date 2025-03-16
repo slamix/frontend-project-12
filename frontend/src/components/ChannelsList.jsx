@@ -9,7 +9,7 @@ const ChannelList = ({ channels, activeChannel, onChannelClick }) => {
           +
         </Button>
       </div>
-      <ListGroup>
+      <ListGroup style={{ maxHeight: '70vh', overflowY: 'auto' }}>
         {channels.map((channel) => (
           <ListGroup.Item
             key={channel.id}

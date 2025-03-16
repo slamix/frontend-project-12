@@ -35,8 +35,12 @@ const LoginPage = () => {
         const username = response.data.username;
         dispatch(authActions.userLogIn({ username, token }));
         navigate('/');
-      } catch {
-        setError('Неверные имя пользователя или пароль');
+      } catch(error) {
+        if (error.code === 'ERR_NETWORK') {
+          setError('Ошибка сети');
+        } else {
+          setError('Неверные имя пользователя или пароль');
+        }
       }
     }
   });

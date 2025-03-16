@@ -11,10 +11,13 @@ const MessageForm = ({ localToken, activeChannel }) => {
       message: '',
     },
     onSubmit: (values) => {
+      const trimmedMessage = values.message.trim();
+      if (!trimmedMessage) {
+        return;
+      }
       const channelId = activeChannel.id;
-      const { message } = values;
       const username = localStorage.getItem('username');
-      dispatch(addNewMessage({ token: localToken, body: message, channelId, username }));
+      dispatch(addNewMessage({ token: localToken, body: trimmedMessage, channelId, username }));
       formik.resetForm();
     }
   });

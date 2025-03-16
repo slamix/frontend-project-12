@@ -50,7 +50,7 @@ const HomePage = () => {
   }, [localToken, navigate, dispatch]);
 
   return (
-    <Container fluid className="vh-100 d-flex flex-column p-0">
+    <Container fluid className="vh-100 d-flex flex-column p-0" style={{ overflow: "hidden" }}>
       <Header />
       <Row className="flex-grow-1">
         <Col md={3} className="bg-light p-3 border-end">
