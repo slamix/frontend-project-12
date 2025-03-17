@@ -3,20 +3,30 @@ import * as yup from 'yup';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { actions as  authActions } from '../slices/authSlice.js';
+import { actions as authActions } from '../slices/authSlice.js';
 
-const validationSchema = yup.object({
+const registrationSchema = yup.object({
   username: yup.string()
-    .required('Не должно быть пустым')
-    .min(3, 'Имя пользователя должно быть не менее 3 символов'),
+    .required('Обязательное поле')
+    .min(3, 'От 3 до 20 символов')
+    .max(20, 'От 3 до 20 символов')
+    .test('no-spaces', 'Обязательное поле', (value) => {
+      return value.trim().length > 0;
+    }),
   password: yup.string()
-    .required('Не должно быть пустым')
-    .min(3, 'Пароль должен быть не менее 3 символов'),
+    .required('Обязательное поле')
+    .min(6, 'Не менее 6 символов')
+    .test('no-spaces', 'Обязательное поле', (value) => {
+      return value.trim().length > 0;
+    }),
+  confirmPassword: yup.string()
+    .required('Подтвердите пароль')
+    .oneOf([yup.ref('password'), null], 'Пароли должны совпадать'),
 });
 
-const LoginPage = () => {
+const SignupPage = () => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,20 +36,27 @@ const LoginPage = () => {
     initialValues: {
       username: '',
       password: '',
+      confirmPassword: '',
     },
-    validationSchema,
+    validationSchema: registrationSchema,
     onSubmit: async (values) => {
       setError(null);
       try {
-        const response = await axios.post('/api/v1/login', values);
-        const { token, username } = response.data;
+        const response = await axios.post('/api/v1/signup', {
+          username: values.username,
+          password: values.password,
+        });
+        const { username, token } = response.data;
         dispatch(authActions.userLogIn({ username, token }));
         navigate('/');
-      } catch(error) {
+      } catch (error) {
+        console.log(error);
         if (error.code === 'ERR_NETWORK') {
           setError('Ошибка сети');
+        } else if (error.code === 'ERR_BAD_REQUEST') {
+          setError('Такой пользователь уже существует');
         } else {
-          setError('Неверные имя пользователя или пароль');
+          setError('Неизвестная ошибка');
         }
       }
     }
@@ -51,7 +68,7 @@ const LoginPage = () => {
 
   return (
     <Container className="mt-5" style={{ maxWidth: '400px' }}>
-      <h1 className="text-center mb-4">Войти</h1>
+      <h1 className="text-center mb-4">Регистрация</h1>
       <Form onSubmit={formik.handleSubmit}>
         <Form.Group className="mb-3" controlId="username">
           <Form.Label>Имя пользователя</Form.Label>
@@ -60,7 +77,7 @@ const LoginPage = () => {
             id="username"
             type="text"
             name="username"
-            placeholder="Ваше имя пользователя"
+            placeholder="Имя пользователя"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.username}
@@ -87,14 +104,34 @@ const LoginPage = () => {
             {formik.errors.password}
           </Form.Control.Feedback>
         </Form.Group>
+
+        <Form.Group className="mb-3" controlId="confirmPassword">
+          <Form.Label>Подтвердите пароль</Form.Label>
+          <Form.Control
+            id="confirmPassword"
+            type="password"
+            name="confirmPassword"
+            placeholder="Подтвердите пароль"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.confirmPassword}
+            isInvalid={formik.touched.confirmPassword && !!formik.errors.confirmPassword}
+          />
+          <Form.Control.Feedback type="invalid">
+            {formik.errors.confirmPassword}
+          </Form.Control.Feedback>
+        </Form.Group>
+
         {error && (<Alert variant="danger" className="mb-3">{error}</Alert>)}
-        <Button className="w-100" variant="primary" type="submit">Войти</Button>
+
+        <Button className="w-100" variant="primary" type="submit">Зарегистрироваться</Button>
+
         <Form.Text className="text-center mt-3 d-block">
-          Нет аккаунта? <Link to="/signup">Регистрация</Link>
+          Уже есть аккаунт? <Link to="/login">Войти</Link>
         </Form.Text>
       </Form>
     </Container>
   );
 }
 
-export default LoginPage;
+export default SignupPage;
