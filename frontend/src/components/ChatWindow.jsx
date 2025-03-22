@@ -23,23 +23,28 @@ const ChatWindow = ({ localToken, activeChannel }) => {
 
   return (
     <>
-      <div className="bg-light border-bottom p-3">
-        <h5 className="mb-0">{`# ${activeChannel?.name}`}</h5>
-      </div>
-      <Card className="flex-grow-1 rounded-0 border-0 d-flex flex-column">
-        <Card.Body className="overflow-auto" style={{ maxHeight: '79vh' }}>
-          {filteredMessages.map((message) => (
-            <div key={message.id} className="mb-2" style={{ wordWrap: 'break-word'}}>
-              <strong>{message.username}:</strong> {message.body}
-            </div>
-          ))}
-          <div ref={messagesEndRef} /> 
-        </Card.Body>
-      </Card>
-
-      <MessageForm localToken={localToken} activeChannel={activeChannel} />
+      {activeChannel && (
+        <>
+          <div className="bg-light border-bottom p-3">
+            <h5 className="mb-0">{`# ${activeChannel.name}`}</h5>
+          </div>
+          <Card className="flex-grow-1 rounded-0 border-0 d-flex flex-column">
+            <Card.Body className="overflow-auto" style={{ maxHeight: '79vh' }}>
+              {filteredMessages.map((message) => (
+                <div key={message.id} className="mb-2" style={{ wordWrap: 'break-word'}}>
+                  <strong>{message.username}:</strong> {message.body}
+                </div>
+              ))}
+              <div ref={messagesEndRef} /> 
+            </Card.Body>
+          </Card>
+  
+          <MessageForm localToken={localToken} activeChannel={activeChannel} />
+        </>
+      )}
     </>
   );
 };
 
 export default ChatWindow;
+
