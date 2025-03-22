@@ -38,6 +38,8 @@ const ChatWindow = ({ localToken, activeChannel }) => {
             <div ref={messagesEndRef} /> 
           </Card.Body>
         </Card>
+        
+        <MessageForm localToken={localToken} activeChannel={activeChannel} />
     </>
   );
 };
