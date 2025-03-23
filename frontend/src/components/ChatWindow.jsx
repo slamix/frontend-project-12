@@ -2,8 +2,9 @@ import { Card } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import socket from '../socket.js';
 import MessageForm from './MessageForm.jsx';
-import { getMessages } from '../slices/messagesSlice.js';
+import { addNewMessage, getMessages } from '../slices/messagesSlice.js';
 
 const ChatWindow = ({ localToken, activeChannel }) => {
   const dispatch = useDispatch();
@@ -21,11 +22,18 @@ const ChatWindow = ({ localToken, activeChannel }) => {
     dispatch(getMessages(localToken));
   }, [dispatch, localToken]);
 
+  useEffect(() => {
+    socket.on('newMessage', (payload) => {
+      dispatch(addNewMessage(payload));
+    });
+    return () => socket.off('newMessage');
+  });
+
   return (
     <>
       {activeChannel && (
         <div className="bg-light border-bottom p-3">
-          <h5 className="mb-0">{`# ${activeChannel?.name}`}</h5>
+          <h5 className="mb-0">{`# ${activeChannel.name}`}</h5>
         </div>
       )}
       <Card className="flex-grow-1 rounded-0 border-0 d-flex flex-column">

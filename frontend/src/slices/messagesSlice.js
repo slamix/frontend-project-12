@@ -13,18 +13,6 @@ export const getMessages = createAsyncThunk(
   }
 );
 
-export const addNewMessage = createAsyncThunk(
-  'messages/addNewMessages',
-  async ({ token, body, channelId, username }) => {
-    const response = await axios.post('/api/v1/messages', { body, channelId, username }, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    });
-    return response.data;
-  }
-);
-
 const initialState = {
   messages: [],
 }
@@ -33,7 +21,7 @@ const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    getMessage: (state, { payload }) => {
+    addNewMessage: (state, { payload }) => {
       state.messages.push(payload);
     }
   },
@@ -41,12 +29,9 @@ const messagesSlice = createSlice({
     build.addCase(getMessages.fulfilled, (state, action) =>{
       state.messages = action.payload;
     });
-    build.addCase(addNewMessage.fulfilled, (state, action) => {
-      state.messages.push(action.payload);
-    });
   }
 });
 
-export const { getMessage } = messagesSlice.actions;
+export const { addNewMessage } = messagesSlice.actions;
 
 export default messagesSlice.reducer;

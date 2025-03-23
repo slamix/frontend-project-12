@@ -1,23 +1,38 @@
 import { useFormik } from 'formik';
+import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
-import { useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { addNewMessage } from '../slices/messagesSlice.js';
+import { useRef, useEffect, useState } from 'react';
+
 
 const MessageForm = ({ localToken, activeChannel }) => {
-  const dispatch = useDispatch();
+  const [error, setError] = useState(null);
   const formik = useFormik({
     initialValues: {
       message: '',
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      setError(null);
       const trimmedMessage = values.message.trim();
       if (!trimmedMessage) {
         return;
       }
       const channelId = activeChannel.id;
       const username = localStorage.getItem('username');
-      dispatch(addNewMessage({ token: localToken, body: trimmedMessage, channelId, username }));
+      try {
+        await axios.post('/api/v1/messages', { body: trimmedMessage, channelId, username }, {
+          headers: {
+            Authorization: `Bearer ${localToken}`,
+          }
+        });
+      } catch(err) {
+        if (err.code === 'ERR_NETWORK') {
+          setError('Ошибка сети');
+          console.log(error);
+        } else {
+          setError('Неизвестая ошибка');
+          console.log(error);
+        }
+      } 
       formik.resetForm();
     }
   });
