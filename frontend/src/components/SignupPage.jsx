@@ -39,6 +39,8 @@ const SignupPage = () => {
       confirmPassword: '',
     },
     validationSchema: registrationSchema,
+    validateOnBlur: false,
+    validateOnChange: false,
     onSubmit: async (values) => {
       setError(null);
       try {
@@ -79,9 +81,8 @@ const SignupPage = () => {
             name="username"
             placeholder="Имя пользователя"
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             value={formik.values.username}
-            isInvalid={formik.touched.username && !!formik.errors.username}
+            isInvalid={!!formik.errors.username}
           />
           <Form.Control.Feedback type="invalid">
             {formik.errors.username}

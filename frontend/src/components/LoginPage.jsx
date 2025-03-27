@@ -53,7 +53,6 @@ const LoginPage = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.username}
-            isInvalid={formik.touched.username && !!formik.errors.username}
           />
         </Form.Group>
 
@@ -67,7 +66,6 @@ const LoginPage = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.password}
-            isInvalid={formik.touched.password && !!formik.errors.password}
           />
         </Form.Group>
         {error && (<Alert variant="danger" className="mb-3">{error}</Alert>)}

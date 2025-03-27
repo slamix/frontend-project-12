@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { actions as channelsActions } from '../slices/channelsSlice.js';
+import { addNewChannel, addChannels } from '../slices/channelsSlice.js';
 import Header from "./Header.jsx";
 import ChannelsList from "./ChannelsList.jsx";
 import ChatWindow from "./ChatWindow.jsx";
+import socket from '../socket.js';
 
 const getChannels = async (userToken) => {
   try {
@@ -39,7 +40,7 @@ const HomePage = () => {
       const fetchChannels = async () => {
         try {
           const channels = await getChannels(localToken);
-          dispatch(channelsActions.addChannels(channels));
+          dispatch(addChannels(channels));
           setActiveChannel(channels[0]);
         } catch (error) {
           console.log(error);
@@ -48,6 +49,15 @@ const HomePage = () => {
       fetchChannels();
     }
   }, [localToken, navigate, dispatch]);
+
+  useEffect(() => {
+    socket.on('newChannel', (payload) => {
+      dispatch(addNewChannel(payload));
+      setActiveChannel(payload);
+    });
+
+    return () => socket.off('newChannel');
+  });
 
   return (
     <Container fluid className="vh-100 d-flex flex-column p-0" style={{ overflow: "hidden" }}>
