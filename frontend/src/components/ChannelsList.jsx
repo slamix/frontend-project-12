@@ -20,7 +20,7 @@ const ChannelList = ({ channels, activeChannel, onChannelClick }) => {
   return (
     <>
       {activeChannel && channels.length && (
-      <Container fluid className="p-0 d-flex flex-column" style={{ maxHeight: '91vh' }}>
+      <Container fluid className="p-0 d-flex flex-column" style={{ height: '91vh' }}>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h4 className="mb-0">Каналы</h4>
           <Button variant="outline-primary" size="sm" onClick={handleShow}>
