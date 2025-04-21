@@ -4,7 +4,7 @@ import ModalNewChat from './ModalNewChat.jsx';
 import RemovableChannel from './channels/RemovableChannel.jsx';
 import UnremovableChannel from './channels/UnremovableChannel.jsx';
 
-const ChannelList = ({ channels, activeChannel, onChannelClick }) => {
+const ChannelList = ({ channels, activeChannel, onChannelClick, setIsChannelCreator }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShow = () => setShowModal(true);
@@ -54,7 +54,7 @@ const ChannelList = ({ channels, activeChannel, onChannelClick }) => {
           </ListGroup>
         </div>
 
-        <ModalNewChat showModal={showModal} setShowModal={setShowModal} channels={channels} />
+        <ModalNewChat showModal={showModal} setShowModal={setShowModal} channels={channels} setIsChannelCreator={setIsChannelCreator}/>
       </Container>
       )}
     </>

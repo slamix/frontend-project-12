@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 
-const ModalNewChat = ({ setShowModal, showModal, channels }) => {
+const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }) => {
   const [disabled, setDisabled] = useState(false);
 
   const validationSchema = yup.object({
@@ -34,6 +34,7 @@ const ModalNewChat = ({ setShowModal, showModal, channels }) => {
       const token = localStorage.getItem('token');
       const { newChannelName } = values;
       try {
+        setIsChannelCreator(true);
         await axios.post('/api/v1/channels', { name: newChannelName }, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -41,6 +42,7 @@ const ModalNewChat = ({ setShowModal, showModal, channels }) => {
         });
       } catch(err) {
         console.log(err);
+        setIsChannelCreator(false);
       } finally {
         formik.resetForm();
         setDisabled(false);

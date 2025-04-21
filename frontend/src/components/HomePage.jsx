@@ -34,6 +34,7 @@ const HomePage = () => {
   const messages = useSelector((state) => state.messages.messages);
   
   const [activeChannel, setActiveChannel] = useState(null);
+  const [isChannelCreator, setIsChannelCreator] = useState(false);
 
   useEffect(() => {
     if (!localToken) {
@@ -55,7 +56,10 @@ const HomePage = () => {
   useEffect(() => {
     socket.on('newChannel', (payload) => {
       dispatch(addNewChannel(payload));
-      setActiveChannel(payload);
+      if (isChannelCreator) {
+        setActiveChannel(payload);
+        setIsChannelCreator(false);
+      }
     });
 
     return () => socket.off('newChannel');
@@ -90,6 +94,7 @@ const HomePage = () => {
             channels={channels}
             activeChannel={activeChannel}
             onChannelClick={setActiveChannel}
+            setIsChannelCreator={setIsChannelCreator}
           />
         </Col>
         <Col md={9} className="d-flex flex-column p-0">
