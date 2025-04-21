@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { removeChannel } from './channelsSlice';
 
 export const getMessages = createAsyncThunk(
   'messages/getMessages',
@@ -10,6 +11,21 @@ export const getMessages = createAsyncThunk(
       },
     });
     return response.data;
+  }
+);
+
+export const removeMessage = createAsyncThunk(
+  'messages/removeMessage',
+  async (payload, message) => {
+    const { id } = payload;
+    if (message.channelId === id) {
+      const token = localStorage.getItem('token');
+      await axios.delete(`/api/v1/messages/${message.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
   }
 );
 
@@ -25,9 +41,15 @@ const messagesSlice = createSlice({
       state.messages.push(payload);
     }
   },
-  extraReducers: (build) => {
-    build.addCase(getMessages.fulfilled, (state, action) =>{
-      state.messages = action.payload;
+  extraReducers: (builder) => {
+    builder.addCase(getMessages.fulfilled, (state, { payload }) => {
+      state.messages = payload;
+      console.log(state.messages)
+    });
+    builder.addCase(removeChannel, (state, { payload }) => {
+      const channelId = payload.id;
+      const restMessages = state.messages.filter((message) => message.channelId !== channelId);
+      state.messages = restMessages;
     });
   }
 });

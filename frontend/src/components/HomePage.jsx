@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { addNewChannel, addChannels } from '../slices/channelsSlice.js';
+import { addNewChannel, addChannels, removeChannel, renameChannel } from '../slices/channelsSlice.js';
+import { removeMessage } from '../slices/messagesSlice.js';
 import Header from "./Header.jsx";
 import ChannelsList from "./ChannelsList.jsx";
 import ChatWindow from "./ChatWindow.jsx";
@@ -30,6 +31,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const localToken = localStorage.getItem('token');
   const channels = useSelector((state) => state.channels.channels);
+  const messages = useSelector((state) => state.messages.messages);
   
   const [activeChannel, setActiveChannel] = useState(null);
 
@@ -57,6 +59,26 @@ const HomePage = () => {
     });
 
     return () => socket.off('newChannel');
+  });
+
+  useEffect(() => {
+    socket.on('removeChannel', (payload) => {
+      dispatch(removeChannel(payload));
+      messages.forEach((message) => dispatch(removeMessage(payload, message)));
+      if (payload.id === activeChannel.id) {
+        setActiveChannel(channels[0]);
+      }
+    });
+
+    return () => socket.off('removeChannel');
+  });
+
+  useEffect(() => {
+    socket.on('renameChannel', (payload) => {
+      dispatch(renameChannel(payload));
+    });
+
+    return () => socket.off('renameChannel');
   });
 
   return (
