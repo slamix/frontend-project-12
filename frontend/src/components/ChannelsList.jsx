@@ -1,6 +1,6 @@
 import { ListGroup, Button, Container, Dropdown, DropdownButton ,SplitButton } from 'react-bootstrap';
 import { useState, useEffect, useRef } from 'react';
-import ModalNewChat from './ModalNewChat.jsx';
+import ModalNewChat from './modals/ModalNewChat.jsx';
 import RemovableChannel from './channels/RemovableChannel.jsx';
 import UnremovableChannel from './channels/UnremovableChannel.jsx';
 

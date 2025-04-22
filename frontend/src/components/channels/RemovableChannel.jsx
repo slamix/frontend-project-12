@@ -1,7 +1,7 @@
 import { Button, Dropdown, } from "react-bootstrap";
 import { useState } from "react";
-import RemoveModal from "../RemoveModal";
-import RenameModal from "../RenameModal";
+import RemoveModal from "../modals/RemoveModal";
+import RenameModal from "../modals/RenameModal";
 
 const RemovableChannel = ({ channel, isActive, onClick }) => {
   const [removeModalOpened, setRemoveModalOpened] = useState(null);
@@ -32,8 +32,8 @@ const RemovableChannel = ({ channel, isActive, onClick }) => {
           />
           
           <Dropdown.Menu>
-            <Dropdown.Item eventKey="1" onClick={() => handleClick(setRemoveModalOpened)}>Удалить</Dropdown.Item>
-            <Dropdown.Item eventKey="2" onClick={() => handleClick(setRenameModalOpened)}>Переименовать</Dropdown.Item>
+            <Dropdown.Item eventKey="1" onClick={() => handleClick(setRemoveModalOpened)} active={false}>Удалить</Dropdown.Item>
+            <Dropdown.Item eventKey="2" onClick={() => handleClick(setRenameModalOpened)} active={false}>Переименовать</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <RemoveModal opened={removeModalOpened} setOpened={setRemoveModalOpened} channel={channel} />
