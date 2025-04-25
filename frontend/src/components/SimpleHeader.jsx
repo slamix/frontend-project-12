@@ -1,17 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import { userLogOut } from '../slices/authSlice.js';
 
 const Header = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate()
 
-  const handleLogout = () => {
-    dispatch(userLogOut());
-    navigate('/');
-  }
   const goToHome = () => {
     navigate('/');
   };
@@ -26,9 +19,6 @@ const Header = () => {
         >
           Hexlet Chat
         </span>
-        <Button variant="primary" onClick={handleLogout}>
-          Выйти
-        </Button>
       </div>
     </div>
   );
