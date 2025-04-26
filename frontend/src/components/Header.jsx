@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { userLogOut } from '../slices/authSlice.js';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
@@ -24,10 +26,10 @@ const Header = () => {
           onClick={goToHome}
           style={{ cursor: 'pointer' }}
         >
-          Hexlet Chat
+          {t('homepage.header.title')}
         </span>
         <Button variant="primary" onClick={handleLogout}>
-          Выйти
+          {t('homepage.header.exit')}
         </Button>
       </div>
     </div>

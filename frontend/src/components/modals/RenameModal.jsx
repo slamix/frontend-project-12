@@ -4,10 +4,12 @@ import * as yup from 'yup';
 import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const RenameModal = ({ opened, setOpened, channel }) => {
   const [disabled, setDisabled] = useState(false);
   const channels = useSelector((state) => state.channels.channels);
+  const { t } = useTranslation();
 
   const validationSchema = yup.object({
     newChannelName: yup
@@ -72,7 +74,7 @@ const RenameModal = ({ opened, setOpened, channel }) => {
   return (
     <Modal show={opened} onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Переименовать канал</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{t('modals.renameModal.renameChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -92,10 +94,10 @@ const RenameModal = ({ opened, setOpened, channel }) => {
           </Form.Group>
           <div className="d-flex justify-content-end gap-2">
             <Button variant="secondary" onClick={handleClose}>
-              Отменить
+            {t('modals.renameModal.cancel')}
             </Button>
             <Button variant="primary" type="submit" disabled={disabled}>
-              Отправить
+            {t('modals.renameModal.send')}
             </Button> 
           </div>
         </Form>

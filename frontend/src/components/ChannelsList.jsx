@@ -3,9 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 import ModalNewChat from './modals/ModalNewChat.jsx';
 import RemovableChannel from './channels/RemovableChannel.jsx';
 import UnremovableChannel from './channels/UnremovableChannel.jsx';
+import { useTranslation } from 'react-i18next';
 
 const ChannelList = ({ channels, activeChannel, onChannelClick, setIsChannelCreator }) => {
   const [showModal, setShowModal] = useState(false);
+  const { t } = useTranslation();
 
   const handleShow = () => setShowModal(true);
 
@@ -22,7 +24,7 @@ const ChannelList = ({ channels, activeChannel, onChannelClick, setIsChannelCrea
       {activeChannel && channels.length && (
       <Container fluid className="p-0 d-flex flex-column" style={{ height: '91vh' }}>
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4 className="mb-0">Каналы</h4>
+          <h4 className="mb-0">{t('homepage.channels')}</h4>
           <Button variant="outline-primary" size="sm" onClick={handleShow}>
             +
           </Button>

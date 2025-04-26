@@ -6,12 +6,14 @@ import { useDispatch } from 'react-redux'
 import axios from 'axios';
 import { userLogIn } from '../slices/authSlice.js';
 import SimpleHeader from './SimpleHeader.jsx';
+import { useTranslation } from 'react-i18next';
 
 const LoginPage = () => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const usernameInputRef = useRef(null);
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -43,16 +45,16 @@ const LoginPage = () => {
     <>
       <SimpleHeader />
       <Container className="mt-5" style={{ maxWidth: '400px' }}>
-        <h1 className="text-center mb-4">Войти</h1>
+        <h1 className="text-center mb-4">{t('loginPage.login')}</h1>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3" controlId="username">
-            <Form.Label>Имя пользователя</Form.Label>
+            <Form.Label>{t('username')}</Form.Label>
             <Form.Control
               ref={usernameInputRef}
               id="username"
               type="text"
               name="username"
-              placeholder="Ваше имя пользователя"
+              placeholder={t('username')}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.username}
@@ -60,21 +62,21 @@ const LoginPage = () => {
           </Form.Group>
   
           <Form.Group className="mb-3" controlId="password">
-            <Form.Label>Пароль</Form.Label>
+            <Form.Label>{t('password')}</Form.Label>
             <Form.Control
               id="password"
               type="password"
               name="password"
-              placeholder="Пароль"
+              placeholder={t('password')}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.password}
             />
           </Form.Group>
           {error && (<Alert variant="danger" className="mb-3">{error}</Alert>)}
-          <Button className="w-100" variant="primary" type="submit">Войти</Button>
+          <Button className="w-100" variant="primary" type="submit">{t('loginPage.login')}</Button>
           <Form.Text className="text-center mt-3 d-block">
-            Нет аккаунта? <Link to="/signup">Регистрация</Link>
+            {t('loginPage.noAcc')} <Link to="/signup">{t('loginPage.signupNavigate')}</Link>
           </Form.Text>
         </Form>
       </Container>

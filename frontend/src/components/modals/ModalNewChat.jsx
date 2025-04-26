@@ -3,9 +3,11 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
+import { useTranslation } from "react-i18next";
 
 const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }) => {
   const [disabled, setDisabled] = useState(false);
+  const { t } = useTranslation();
 
   const validationSchema = yup.object({
     newChannelName: yup
@@ -72,7 +74,7 @@ const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }
   return (
     <Modal show={showModal} onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Добавить канал</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{t('modals.newChatModal.addChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -92,10 +94,10 @@ const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }
           </Form.Group>
           <div className="d-flex justify-content-end gap-2">
             <Button variant="secondary" onClick={handleClose}>
-              Отменить
+            {t('modals.newChatModal.cancel')}
             </Button>
             <Button variant="primary" type="submit" disabled={disabled}>
-              Отправить
+            {t('modals.newChatModal.send')}
             </Button> 
           </div>
         </Form>

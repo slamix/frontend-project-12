@@ -1,9 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const goToHome = () => {
     navigate('/');
@@ -17,7 +18,7 @@ const Header = () => {
           onClick={goToHome}
           style={{ cursor: 'pointer' }}
         >
-          Hexlet Chat
+          {t('homepage.header.title')}
         </span>
       </div>
     </div>

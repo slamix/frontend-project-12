@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { userLogIn } from '../slices/authSlice.js';
 import SimpleHeader from './SimpleHeader.jsx';
 
@@ -32,6 +33,7 @@ const SignupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const usernameInputRef = useRef(null);
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -73,16 +75,16 @@ const SignupPage = () => {
     <>
       <SimpleHeader />
       <Container className="mt-5" style={{ maxWidth: '400px' }}>
-        <h1 className="text-center mb-4">Регистрация</h1>
+        <h1 className="text-center mb-4">{t('signupPage.signup')}</h1>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3" controlId="username">
-            <Form.Label>Имя пользователя</Form.Label>
+            <Form.Label>{t('username')}</Form.Label>
             <Form.Control
               ref={usernameInputRef}
               id="username"
               type="text"
               name="username"
-              placeholder="Имя пользователя"
+              placeholder={t('username')}
               onChange={formik.handleChange}
               value={formik.values.username}
               isInvalid={!!formik.errors.username}
@@ -93,12 +95,12 @@ const SignupPage = () => {
           </Form.Group>
   
           <Form.Group className="mb-3" controlId="password">
-            <Form.Label>Пароль</Form.Label>
+            <Form.Label>{t('password')}</Form.Label>
             <Form.Control
               id="password"
               type="password"
               name="password"
-              placeholder="Пароль"
+              placeholder={t('password')}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.password}
@@ -110,12 +112,12 @@ const SignupPage = () => {
           </Form.Group>
   
           <Form.Group className="mb-3" controlId="confirmPassword">
-            <Form.Label>Подтвердите пароль</Form.Label>
+            <Form.Label>{t('signupPage.confirmPassword')}</Form.Label>
             <Form.Control
               id="confirmPassword"
               type="password"
               name="confirmPassword"
-              placeholder="Подтвердите пароль"
+              placeholder={t('signupPage.confirmPassword')}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.confirmPassword}
@@ -128,10 +130,10 @@ const SignupPage = () => {
   
           {error && (<Alert variant="danger" className="mb-3">{error}</Alert>)}
   
-          <Button className="w-100" variant="primary" type="submit">Зарегистрироваться</Button>
+          <Button className="w-100" variant="primary" type="submit">{t('signupPage.registration')}</Button>
   
           <Form.Text className="text-center mt-3 d-block">
-            Уже есть аккаунт? <Link to="/login">Войти</Link>
+          {t('signupPage.haveAcc')} <Link to="/login">{t('signupPage.loginNavigate')}</Link>
           </Form.Text>
         </Form>
       </Container>

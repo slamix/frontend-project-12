@@ -2,9 +2,10 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 import { useRef, useEffect, useState } from 'react';
-
+import { useTranslation } from 'react-i18next';
 
 const MessageForm = ({ localToken, activeChannel }) => {
+  const { t } = useTranslation();
   const [error, setError] = useState(null);
   const formik = useFormik({
     initialValues: {
@@ -55,7 +56,7 @@ const MessageForm = ({ localToken, activeChannel }) => {
         <Form.Control
           as="textarea"
           rows={2}
-          placeholder="Сообщение"
+          placeholder={t('homepage.message')}
           style={{ resize: 'none' }}
           id="message"
           name="message"
@@ -65,7 +66,7 @@ const MessageForm = ({ localToken, activeChannel }) => {
           ref={textareaRef}
         />
         <Button variant="primary" className="ms-2" type="submit">
-          Отправить
+          {t('homepage.sendButton')}
         </Button>
       </Form.Group>
     </Form>
