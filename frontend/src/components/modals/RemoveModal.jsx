@@ -2,10 +2,13 @@ import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 const RemoveModal = ({ opened, setOpened, channel }) => {
   const [disabled, setDisabled] = useState(null);
   const { t } = useTranslation();
+
+  const notify = () => toast.success(t('notifications.deleted'));
 
   const handleDelete = async () => {
     setDisabled(true);
@@ -16,6 +19,7 @@ const RemoveModal = ({ opened, setOpened, channel }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      notify();
     } catch(e) {
       console.log(e);
     } finally {

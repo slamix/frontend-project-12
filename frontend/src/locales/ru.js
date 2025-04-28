@@ -33,7 +33,7 @@ export default {
         send: 'Отправить'
       },
       removeModal: {
-        removeChanel: 'Удалить канал',
+        removeChannel: 'Удалить канал',
         confirmation: 'Уверены?',
         remove: 'Удалить',
         cancel: 'Отменить',
@@ -44,8 +44,16 @@ export default {
         cancel: 'Отменить',
       },
     },
+    notifications: {
+      created: 'Канал создан',
+      deleted: 'Канал удалён',
+      renamed: 'Канал переименован',
+    },
     errors: {
-
+      network: 'Ошибка сети',
+      incorrectPasswordOrUsername: 'Неверные имя пользователя или пароль',
+      userExist: 'Такой пользователь уже существует',
+      unknown: 'Неизвестная ошибка',
     },
     username: 'Имя пользователя',
     password: 'Пароль',

@@ -15,7 +15,7 @@ const NotFoundPage = () => {
           </Card.Title>
 
           <Card.Text className="mb-4" style={{ fontSize: '1.25rem' }}>
-            {t('notFound')}
+            {t('notFoundPage.notFound')}
           </Card.Text>
           <Card.Text className="mb-4" style={{ fontSize: '1rem', color: '#6c757d' }}>
             {t('notFoundPage.navigateToHome')}
@@ -26,7 +26,7 @@ const NotFoundPage = () => {
             size="lg"
             onClick={() => navigate('/')}
           >
-            {t('toHome')}
+            {t('notFoundPage.toHome')}
           </Button>
         </Card.Body>
       </Card>

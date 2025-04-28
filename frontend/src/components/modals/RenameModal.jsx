@@ -5,11 +5,14 @@ import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 const RenameModal = ({ opened, setOpened, channel }) => {
   const [disabled, setDisabled] = useState(false);
   const channels = useSelector((state) => state.channels.channels);
   const { t } = useTranslation();
+
+  const notify = () => toast.success(t('notifications.renamed'));
 
   const validationSchema = yup.object({
     newChannelName: yup
@@ -43,6 +46,7 @@ const RenameModal = ({ opened, setOpened, channel }) => {
             Authorization: `Bearer ${token}`,
           }
         });
+        notify();
       } catch(err) {
         console.log(err);
       } finally {

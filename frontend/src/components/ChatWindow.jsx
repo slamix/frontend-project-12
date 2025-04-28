@@ -19,7 +19,9 @@ const ChatWindow = ({ localToken, activeChannel }) => {
   }, [filteredMessages]);
 
   useEffect(() => {
-    dispatch(getMessages(localToken));
+    if (localToken) {
+      dispatch(getMessages(localToken));
+    }
   }, [dispatch, localToken]);
 
   useEffect(() => {

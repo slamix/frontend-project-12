@@ -4,10 +4,13 @@ import * as yup from 'yup';
 import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 
 const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }) => {
   const [disabled, setDisabled] = useState(false);
   const { t } = useTranslation();
+
+  const notify = () => toast.success(t('notifications.created'));
 
   const validationSchema = yup.object({
     newChannelName: yup
@@ -42,6 +45,7 @@ const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }
             Authorization: `Bearer ${token}`,
           }
         });
+        notify();
       } catch(err) {
         console.log(err);
         setIsChannelCreator(false);
@@ -98,7 +102,7 @@ const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }
             </Button>
             <Button variant="primary" type="submit" disabled={disabled}>
             {t('modals.newChatModal.send')}
-            </Button> 
+            </Button>
           </div>
         </Form>
       </Modal.Body>

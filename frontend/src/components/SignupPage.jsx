@@ -30,6 +30,7 @@ const registrationSchema = yup.object({
 
 const SignupPage = () => {
   const [error, setError] = useState(null);
+  const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const usernameInputRef = useRef(null);
@@ -46,6 +47,7 @@ const SignupPage = () => {
     validateOnChange: false,
     onSubmit: async (values) => {
       setError(null);
+      setDisabled(true);
       try {
         const response = await axios.post('/api/v1/signup', {
           username: values.username,
@@ -55,14 +57,16 @@ const SignupPage = () => {
         dispatch(userLogIn({ username, token }));
         navigate('/');
       } catch (error) {
-        console.log(error);
         if (error.code === 'ERR_NETWORK') {
-          setError('Ошибка сети');
+          setError(t('errors.network'));
         } else if (error.code === 'ERR_BAD_REQUEST') {
-          setError('Такой пользователь уже существует');
+          setError(t('errors.userExist'));
         } else {
-          setError('Неизвестная ошибка');
+          console.log(error);
+          setError(t('errors.unknown'));
         }
+      } finally {
+        setDisabled(false);
       }
     }
   });
@@ -130,7 +134,7 @@ const SignupPage = () => {
   
           {error && (<Alert variant="danger" className="mb-3">{error}</Alert>)}
   
-          <Button className="w-100" variant="primary" type="submit">{t('signupPage.registration')}</Button>
+          <Button className="w-100" variant="primary" type="submit" disabled={disabled}>{t('signupPage.registration')}</Button>
   
           <Form.Text className="text-center mt-3 d-block">
           {t('signupPage.haveAcc')} <Link to="/login">{t('signupPage.loginNavigate')}</Link>

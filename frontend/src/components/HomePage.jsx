@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { ToastContainer } from 'react-toastify';
 import { addNewChannel, addChannels, removeChannel, renameChannel } from '../slices/channelsSlice.js';
 import { removeMessage } from '../slices/messagesSlice.js';
 import Header from "./Header.jsx";
@@ -101,6 +102,7 @@ const HomePage = () => {
           <ChatWindow activeChannel={activeChannel} localToken={localToken} />
         </Col>
       </Row>
+      <ToastContainer />
     </Container>
   );
 };

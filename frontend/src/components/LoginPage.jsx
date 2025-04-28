@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 const LoginPage = () => {
   const [error, setError] = useState(null);
+  const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const usernameInputRef = useRef(null);
@@ -22,6 +23,7 @@ const LoginPage = () => {
     },
     onSubmit: async (values) => {
       setError(null);
+      setDisabled(true);
       try {
         const response = await axios.post('/api/v1/login', values);
         const { token, username } = response.data;
@@ -29,10 +31,15 @@ const LoginPage = () => {
         navigate('/');
       } catch(error) {
         if (error.code === 'ERR_NETWORK') {
-          setError('Ошибка сети');
+          setError(t('errors.network'));
+        } else if (error.code === 'ERR_BAD_REQUEST') {
+          setError(t('errors.incorrectPasswordOrUsername'));
         } else {
-          setError('Неверные имя пользователя или пароль');
+          console.log(error);
+          setError(t('errors.unknown'));
         }
+      } finally {
+        setDisabled(false);
       }
     }
   });
@@ -74,7 +81,7 @@ const LoginPage = () => {
             />
           </Form.Group>
           {error && (<Alert variant="danger" className="mb-3">{error}</Alert>)}
-          <Button className="w-100" variant="primary" type="submit">{t('loginPage.login')}</Button>
+          <Button className="w-100" variant="primary" type="submit" disabled={disabled}>{t('loginPage.login')}</Button>
           <Form.Text className="text-center mt-3 d-block">
             {t('loginPage.noAcc')} <Link to="/signup">{t('loginPage.signupNavigate')}</Link>
           </Form.Text>
