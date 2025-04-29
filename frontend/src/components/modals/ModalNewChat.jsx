@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
+import filter from "../../utils/profanityFilter.js";
 
 const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }) => {
   const [disabled, setDisabled] = useState(false);
@@ -37,7 +38,7 @@ const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }
     onSubmit: async (values) => {
       setDisabled(true);
       const token = localStorage.getItem('token');
-      const { newChannelName } = values;
+      const newChannelName = filter.clean(values.newChannelName);
       try {
         setIsChannelCreator(true);
         await axios.post('/api/v1/channels', { name: newChannelName }, {

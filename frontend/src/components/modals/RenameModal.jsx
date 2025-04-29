@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import filter from "../../utils/profanityFilter.js";
 
 const RenameModal = ({ opened, setOpened, channel }) => {
   const [disabled, setDisabled] = useState(false);
@@ -39,7 +40,7 @@ const RenameModal = ({ opened, setOpened, channel }) => {
     onSubmit: async (values) => {
       setDisabled(true);
       const token = localStorage.getItem('token');
-      const { newChannelName } = values;
+      const newChannelName = filter.clean(values.newChannelName);
       try {
         await axios.patch(`/api/v1/channels/${channel.id}`, { name: newChannelName }, {
           headers: {

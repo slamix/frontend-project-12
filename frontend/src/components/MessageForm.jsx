@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import filter from '../utils/profanityFilter.js';
 
 const MessageForm = ({ localToken, activeChannel }) => {
   const { t } = useTranslation();
@@ -13,7 +14,7 @@ const MessageForm = ({ localToken, activeChannel }) => {
     },
     onSubmit: async (values) => {
       setError(null);
-      const trimmedMessage = values.message.trim();
+      const trimmedMessage = filter.clean(values.message.trim());
       if (!trimmedMessage) {
         return;
       }
