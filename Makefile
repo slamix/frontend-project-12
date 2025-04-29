@@ -1,4 +1,4 @@
-install:
+install: preinstall
 		npm ci --prefix frontend
 
 preinstall:

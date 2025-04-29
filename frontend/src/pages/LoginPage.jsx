@@ -55,13 +55,13 @@ const LoginPage = () => {
         <h1 className="text-center mb-4">{t('loginPage.login')}</h1>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3" controlId="username">
-            <Form.Label>{t('username')}</Form.Label>
+            <Form.Label>{t('loginPage.username')}</Form.Label>
             <Form.Control
               ref={usernameInputRef}
               id="username"
               type="text"
               name="username"
-              placeholder={t('username')}
+              placeholder={t('loginPage.yourUsername')}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.username}

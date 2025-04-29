@@ -11,6 +11,7 @@ export default {
     },
     signupPage: {
       signup: 'Регистрация',
+      username: 'Имя пользователя',
       confirmPassword: 'Подтвердите пароль',
       registration: 'Зарегистрироваться',
       haveAcc: 'Уже есть аккаунт?',
@@ -18,6 +19,8 @@ export default {
     },
     loginPage: {
       login: 'Войти',
+      username: 'Ник',
+      yourUsername: 'Ваш ник',
       noAcc: 'Нет аккаунта?',
       signupNavigate: 'Регистрация',
     },
@@ -50,12 +53,11 @@ export default {
       renamed: 'Канал переименован',
     },
     errors: {
-      network: 'Ошибка сети',
+      network: 'Ошибка соединения',
       incorrectPasswordOrUsername: 'Неверные имя пользователя или пароль',
       userExist: 'Такой пользователь уже существует',
       unknown: 'Неизвестная ошибка',
     },
-    username: 'Имя пользователя',
     password: 'Пароль',
     remove: 'Удалить',
     rename: 'Переименовать',

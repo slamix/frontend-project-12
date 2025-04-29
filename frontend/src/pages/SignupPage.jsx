@@ -82,13 +82,13 @@ const SignupPage = () => {
         <h1 className="text-center mb-4">{t('signupPage.signup')}</h1>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3" controlId="username">
-            <Form.Label>{t('username')}</Form.Label>
+            <Form.Label>{t('signupPage.username')}</Form.Label>
             <Form.Control
               ref={usernameInputRef}
               id="username"
               type="text"
               name="username"
-              placeholder={t('username')}
+              placeholder={t('signupPage.username')}
               onChange={formik.handleChange}
               value={formik.values.username}
               isInvalid={!!formik.errors.username}
