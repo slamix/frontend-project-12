@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { userLogIn } from '../slices/authSlice.js';
-import SimpleHeader from './SimpleHeader.jsx';
+import SimpleHeader from '../components/SimpleHeader.jsx';
 
 const registrationSchema = yup.object({
   username: yup.string()

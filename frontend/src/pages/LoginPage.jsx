@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux'
 import axios from 'axios';
 import { userLogIn } from '../slices/authSlice.js';
-import SimpleHeader from './SimpleHeader.jsx';
+import SimpleHeader from '../components/SimpleHeader.jsx';
 import { useTranslation } from 'react-i18next';
 
 const LoginPage = () => {

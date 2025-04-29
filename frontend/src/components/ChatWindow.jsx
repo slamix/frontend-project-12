@@ -2,7 +2,7 @@ import { Card } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import socket from '../socket.js';
+import socket from '../utils/socket.js';
 import MessageForm from './MessageForm.jsx';
 import { addNewMessage, getMessages } from '../slices/messagesSlice.js';
 

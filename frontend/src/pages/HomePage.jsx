@@ -7,10 +7,10 @@ import axios from "axios";
 import { ToastContainer } from 'react-toastify';
 import { addNewChannel, addChannels, removeChannel, renameChannel } from '../slices/channelsSlice.js';
 import { removeMessage } from '../slices/messagesSlice.js';
-import Header from "./Header.jsx";
-import ChannelsList from "./ChannelsList.jsx";
-import ChatWindow from "./ChatWindow.jsx";
-import socket from '../socket.js';
+import Header from "../components/Header.jsx";
+import ChannelsList from "../components/ChannelsList.jsx";
+import ChatWindow from "../components/ChatWindow.jsx";
+import socket from '../utils/socket.js';
 
 const getChannels = async (userToken) => {
   try {
