@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
+import { useRollbar } from '@rollbar/react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
@@ -35,6 +36,7 @@ const SignupPage = () => {
   const navigate = useNavigate();
   const usernameInputRef = useRef(null);
   const { t } = useTranslation();
+  const rollbar = useRollbar();
 
   const formik = useFormik({
     initialValues: {
@@ -62,7 +64,7 @@ const SignupPage = () => {
         } else if (error.code === 'ERR_BAD_REQUEST') {
           setError(t('errors.userExist'));
         } else {
-          console.log(error);
+          rollbar.error('Ошибка при регистрации', error);
           setError(t('errors.unknown'));
         }
       } finally {

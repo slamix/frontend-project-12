@@ -4,9 +4,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux'
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 import { userLogIn } from '../slices/authSlice.js';
 import SimpleHeader from '../components/SimpleHeader.jsx';
-import { useTranslation } from 'react-i18next';
 
 const LoginPage = () => {
   const [error, setError] = useState(null);
@@ -15,6 +16,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const usernameInputRef = useRef(null);
   const { t } = useTranslation();
+  const rollbar = useRollbar();
 
   const formik = useFormik({
     initialValues: {
@@ -35,7 +37,7 @@ const LoginPage = () => {
         } else if (error.code === 'ERR_BAD_REQUEST') {
           setError(t('errors.incorrectPasswordOrUsername'));
         } else {
-          console.log(error);
+          rollbar.error('Ошибка при входе', error);
           setError(t('errors.unknown'));
         }
       } finally {
