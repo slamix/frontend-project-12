@@ -2,9 +2,25 @@ import { Card } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 import socket from '../utils/socket.js';
 import MessageForm from './MessageForm.jsx';
-import { addNewMessage, getMessages } from '../slices/messagesSlice.js';
+import { addNewMessage, addMessages } from '../slices/messagesSlice.js';
+
+const getMessages = async (userToken) => {
+  try {
+    const response = await axios.get('/api/v1/channels', {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      }
+    });
+    const channels = response.data;
+    return channels;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
 
 const ChatWindow = ({ localToken, activeChannel }) => {
   const dispatch = useDispatch();
@@ -13,6 +29,20 @@ const ChatWindow = ({ localToken, activeChannel }) => {
   const filteredMessages = messages.filter((message) => message.channelId === activeChannel?.id);
 
   const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    if (localToken) {
+      const fetchMessages = async () => {
+        try {
+          const channels = await getMessages(localToken);
+          dispatch(addMessages(channels));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      fetchMessages();
+    }
+  }, [localToken, dispatch]);
 
   useEffect(() => {
     messagesEndRef.current.scrollIntoView({ behavior: 'instant' });

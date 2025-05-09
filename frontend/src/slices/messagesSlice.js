@@ -2,18 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { removeChannel } from './channelsSlice';
 
-export const getMessages = createAsyncThunk(
-  'messages/getMessages',
-  async (token) => {
-    const response = await axios.get('/api/v1/messages', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  }
-);
-
 export const removeMessage = createAsyncThunk(
   'messages/removeMessage',
   async (payload, message) => {
@@ -39,12 +27,12 @@ const messagesSlice = createSlice({
   reducers: {
     addNewMessage: (state, { payload }) => {
       state.messages.push(payload);
+    },
+    addMessages: (state, { payload }) => {
+      state.messages = payload;
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(getMessages.fulfilled, (state, { payload }) => {
-      state.messages = payload;
-    });
     builder.addCase(removeChannel, (state, { payload }) => {
       const channelId = payload.id;
       const restMessages = state.messages.filter((message) => message.channelId !== channelId);
@@ -53,6 +41,6 @@ const messagesSlice = createSlice({
   }
 });
 
-export const { addNewMessage } = messagesSlice.actions;
+export const { addNewMessage, addMessages } = messagesSlice.actions;
 
 export default messagesSlice.reducer;
