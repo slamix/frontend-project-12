@@ -1,8 +1,9 @@
+/* eslint-disable */
+
 import { io } from 'socket.io-client';
 
-
-const socket = io('https://slack-chat-oen3.onrender.com');
-// const socket = io('http://0.0.0.0:5001');
+const socket = io(process.env.REACT_APP_SOCKET_PROD_ENV);
+// const socket = io('process.env.REACT_APP_SOCKET_DEV_ENV');
 
 
 export default socket;
