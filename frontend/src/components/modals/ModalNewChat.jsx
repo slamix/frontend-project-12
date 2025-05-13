@@ -5,51 +5,56 @@ import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveChannel } from '../../slices/channelsSlice.js';
+import { closeModalNewChat } from "../../slices/modalsSlice.js";
 import filter from "../../utils/profanityFilter.js";
 
-const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }) => {
+const ModalNewChat = () => {
+  const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(false);
   const { t } = useTranslation();
 
-  const notify = () => toast.success(t('notifications.created'));
+  const token = useSelector((state) => state.auth.user.token);
+  const channels = useSelector((state) => state.channels.channels);
+  const modalNewChatStatus = useSelector((state) => state.modals.modalNewChat.status);
 
-  const validationSchema = yup.object({
-    newChannelName: yup
-      .string()
-      .required('Обязательное поле')
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .test('no-spaces', 'Обязательное поле', (value) => {
-        return value.trim().length > 0;
-      })
-      .test('unique-channel', 'Должно быть уникальным', (value) => {
-        return !channels.some((channel) => channel.name === value.trim());
-      }),
-  });
+  const notify = () => toast.success(t('notifications.created'));
 
   const formik = useFormik({
     initialValues: {
       newChannelName: '',
     },
-    validationSchema,
+    validationSchema: yup.object({
+      newChannelName: yup
+        .string()
+        .required(t('errors.required'))
+        .min(3, t('errors.lengthRules'))
+        .max(20, t('errors.lengthRules'))
+        .test('no-spaces', t('errors.required'), (value) => {
+          return value.trim().length > 0;
+        })
+        .test('unique-channel', t('errors.unique'), (value) => {
+          return !channels.some((channel) => channel.name === value.trim());
+        }),
+    }),
     validateOnBlur: false,
     validateOnChange: false,
     context: { channels },
     onSubmit: async (values) => {
       setDisabled(true);
-      const token = localStorage.getItem('token');
       const newChannelName = filter.clean(values.newChannelName);
       try {
-        setIsChannelCreator(true);
-        await axios.post('/api/v1/channels', { name: newChannelName }, {
+        const response = await axios.post('/api/v1/channels', { name: newChannelName }, {
           headers: {
             Authorization: `Bearer ${token}`,
           }
         });
+        const newChannel = response.data;
+        dispatch(setActiveChannel(newChannel));
         notify();
       } catch(err) {
         console.log(err);
-        setIsChannelCreator(false);
       } finally {
         formik.resetForm();
         setDisabled(false);
@@ -65,19 +70,19 @@ const ModalNewChat = ({ setShowModal, showModal, channels, setIsChannelCreator }
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (showModal) {
+    if (modalNewChatStatus) {
       inputRef.current.focus();
     }
-  }, [showModal]);
+  }, [modalNewChatStatus]);
   
   const handleClose = () => {
     formik.setErrors({});
     formik.resetForm();
-    setShowModal(false);
+    dispatch(closeModalNewChat());
   }
 
   return (
-    <Modal show={showModal} onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal show={modalNewChatStatus} onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">{t('modals.newChatModal.addChannel')}</Modal.Title>
       </Modal.Header>

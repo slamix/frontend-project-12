@@ -10,25 +10,6 @@ import { useTranslation } from 'react-i18next';
 import { userLogIn } from '../slices/authSlice.js';
 import SimpleHeader from '../components/SimpleHeader.jsx';
 
-const registrationSchema = yup.object({
-  username: yup.string()
-    .required('Обязательное поле')
-    .min(3, 'От 3 до 20 символов')
-    .max(20, 'От 3 до 20 символов')
-    .test('no-spaces', 'Обязательное поле', (value) => {
-      return value.trim().length > 0;
-    }),
-  password: yup.string()
-    .required('Обязательное поле')
-    .min(6, 'Не менее 6 символов')
-    .test('no-spaces', 'Обязательное поле', (value) => {
-      return value.trim().length > 0;
-    }),
-  confirmPassword: yup.string()
-    .required('Подтвердите пароль')
-    .oneOf([yup.ref('password'), null], 'Пароли должны совпадать'),
-});
-
 const SignupPage = () => {
   const [error, setError] = useState(null);
   const [disabled, setDisabled] = useState(false);
@@ -44,7 +25,24 @@ const SignupPage = () => {
       password: '',
       confirmPassword: '',
     },
-    validationSchema: registrationSchema,
+    validationSchema: yup.object({
+      username: yup.string()
+        .required(t('errors.required'))
+        .min(3, t('errors.lengthRules'))
+        .max(20, t('errors.lengthRules'))
+        .test('no-spaces', t('errors.required'), (value) => {
+          return value.trim().length > 0;
+        }),
+      password: yup.string()
+        .required(t('errors.required'))
+        .min(6, t('errors.passwordMinLength'))
+        .test('no-spaces', t('errors.required'), (value) => {
+          return value.trim().length > 0;
+        }),
+      confirmPassword: yup.string()
+        .required(t('signupPage.confirmPassword'))
+        .oneOf([yup.ref('password'), null], t('errors.passwordsMatch')),
+    }),
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {

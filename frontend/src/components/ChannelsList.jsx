@@ -1,15 +1,18 @@
-import { ListGroup, Button, Container, Dropdown, DropdownButton ,SplitButton } from 'react-bootstrap';
-import { useState, useEffect, useRef } from 'react';
-import ModalNewChat from './modals/ModalNewChat.jsx';
+import { ListGroup, Button, Container } from 'react-bootstrap';
+import { useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import RemovableChannel from './channels/RemovableChannel.jsx';
 import UnremovableChannel from './channels/UnremovableChannel.jsx';
-import { useTranslation } from 'react-i18next';
+import { openModalNewChat } from '../slices/modalsSlice.js';
 
-const ChannelList = ({ channels, activeChannel, onChannelClick, setIsChannelCreator }) => {
-  const [showModal, setShowModal] = useState(false);
+const ChannelList = () => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
-
-  const handleShow = () => setShowModal(true);
+  const activeChannel = useSelector((state) => state.channels.activeChannel);
+  const channels = useSelector((state) => state.channels.channels);
+  
+  const handleShow = () => dispatch(openModalNewChat());
 
   const activeChannelRef = useRef(null);
 
@@ -20,46 +23,38 @@ const ChannelList = ({ channels, activeChannel, onChannelClick, setIsChannelCrea
   }, [activeChannel]);
   
   return (
-    <>
-      {activeChannel && channels.length && (
-      <Container fluid className="p-0 d-flex flex-column" style={{ height: '91vh' }}>
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4 className="mb-0">{t('homepage.channels')}</h4>
-          <Button variant="outline-primary" size="sm" onClick={handleShow}>
-            +
-          </Button>
-        </div>
-        <div style={{ flex: '1 1 auto', overflowY: 'auto', minHeight: '0' }}>
-          <ListGroup>
-            {channels.map((channel) => (
-              <ListGroup.Item
-                ref={activeChannel.id === channel.id ? activeChannelRef : null}
-                key={channel.id}
-                active={channel.id === activeChannel.id}
-                className="p-0 border-0"
-              >
-                {channel.removable ? (
-                  <RemovableChannel
-                    channel={channel}
-                    isActive={channel.id === activeChannel.id}
-                    onClick={() => onChannelClick(channel)}
-                  />
-                ) : (
-                  <UnremovableChannel
-                    channel={channel}
-                    isActive={channel.id === activeChannel.id}
-                    onClick={() => onChannelClick(channel)}
-                  />
-                )}
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </div>
-
-        <ModalNewChat showModal={showModal} setShowModal={setShowModal} channels={channels} setIsChannelCreator={setIsChannelCreator}/>
-      </Container>
-      )}
-    </>
+    <Container fluid className="p-0 d-flex flex-column" style={{ height: '91vh' }}>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h4 className="mb-0">{t('homepage.channels')}</h4>
+        <Button variant="outline-primary" size="sm" onClick={handleShow}>
+          +
+        </Button>
+      </div>
+      <div style={{ flex: '1 1 auto', overflowY: 'auto', minHeight: '0' }}>
+        <ListGroup>
+          {channels.map((channel) => (
+            <ListGroup.Item
+              ref={activeChannel?.id === channel.id ? activeChannelRef : null}
+              key={channel.id}
+              active={channel.id === activeChannel.id}
+              className="p-0 border-0"
+            >
+              {channel.removable ? (
+                <RemovableChannel
+                  channel={channel}
+                  isActive={channel.id === activeChannel.id}
+                />
+              ) : (
+                <UnremovableChannel
+                  channel={channel}
+                  isActive={channel.id === activeChannel.id}
+                />
+              )}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </div>
+    </Container>
   );
 };
 

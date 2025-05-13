@@ -1,23 +1,25 @@
 import { Button, Dropdown, } from "react-bootstrap";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import RemoveModal from "../modals/RemoveModal";
 import RenameModal from "../modals/RenameModal";
-import { useTranslation } from "react-i18next";
+import { setActiveChannel } from "../../slices/channelsSlice";
+import { openModalRemoveChat, openModalRenameChat } from "../../slices/modalsSlice";
 
-const RemovableChannel = ({ channel, isActive, onClick }) => {
-  const [removeModalOpened, setRemoveModalOpened] = useState(null);
-  const [renameModalOpened, setRenameModalOpened] = useState(null);
+
+const RemovableChannel = ({ channel, isActive }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  const handleClick = (handleOpen) => {
-    handleOpen(true);
+  const handleSetActive = (channel) => {
+    dispatch(setActiveChannel(channel));
   }
 
   return (
     <div className="d-flex">
       <Button
         variant={isActive ? 'primary' : 'light'}
-        onClick={onClick}
+        onClick={() => handleSetActive(channel)}
         className={`text-start flex-grow-1 rounded-0 border-end-0 ${isActive ? 'text-white' : ''}`}
         style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
       >
@@ -34,12 +36,12 @@ const RemovableChannel = ({ channel, isActive, onClick }) => {
           />
           
           <Dropdown.Menu>
-            <Dropdown.Item eventKey="1" onClick={() => handleClick(setRemoveModalOpened)} active={false}>{t('remove')}</Dropdown.Item>
-            <Dropdown.Item eventKey="2" onClick={() => handleClick(setRenameModalOpened)} active={false}>{t('rename')}</Dropdown.Item>
+            <Dropdown.Item eventKey="1" onClick={() => dispatch(openModalRemoveChat())} active={false}>{t('remove')}</Dropdown.Item>
+            <Dropdown.Item eventKey="2" onClick={() => dispatch(openModalRenameChat())} active={false}>{t('rename')}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <RemoveModal opened={removeModalOpened} setOpened={setRemoveModalOpened} channel={channel} />
-        <RenameModal opened={renameModalOpened} setOpened={setRenameModalOpened} channel={channel} />
+        <RemoveModal channel={channel} />
+        <RenameModal channel={channel} />
     </div>
   );
 };

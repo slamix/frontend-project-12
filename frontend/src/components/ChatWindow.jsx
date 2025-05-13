@@ -1,15 +1,13 @@
 import { Card } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import socket from '../utils/socket.js';
 import MessageForm from './MessageForm.jsx';
-import { addNewMessage, addMessages } from '../slices/messagesSlice.js';
+import { addMessages } from '../slices/messagesSlice.js';
 
 const getMessages = async (userToken) => {
   try {
-    const response = await axios.get('/api/v1/channels', {
+    const response = await axios.get('/api/v1/messages', {
       headers: {
         Authorization: `Bearer ${userToken}`,
       }
@@ -22,44 +20,33 @@ const getMessages = async (userToken) => {
   }
 }
 
-const ChatWindow = ({ localToken, activeChannel }) => {
+const ChatWindow = () => {
   const dispatch = useDispatch();
   
+  const token = localStorage.getItem('token');
   const messages = useSelector((state) => state.messages.messages);
+  const activeChannel = useSelector((state) => state.channels.activeChannel);
   const filteredMessages = messages.filter((message) => message.channelId === activeChannel?.id);
 
   const messagesEndRef = useRef(null);
-
-  useEffect(() => {
-    if (localToken) {
-      const fetchMessages = async () => {
-        try {
-          const channels = await getMessages(localToken);
-          dispatch(addMessages(channels));
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      fetchMessages();
-    }
-  }, [localToken, dispatch]);
 
   useEffect(() => {
     messagesEndRef.current.scrollIntoView({ behavior: 'instant' });
   }, [filteredMessages]);
 
   useEffect(() => {
-    if (localToken) {
-      dispatch(getMessages(localToken));
+    if (token) {
+      const fetchMessages = async () => {
+        try {
+          const messages = await getMessages(token);
+          dispatch(addMessages(messages));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      fetchMessages();
     }
-  }, [dispatch, localToken]);
-
-  useEffect(() => {
-    socket.on('newMessage', (payload) => {
-      dispatch(addNewMessage(payload));
-    });
-    return () => socket.off('newMessage');
-  });
+  }, [token, dispatch]);
 
   return (
     <>
@@ -69,17 +56,16 @@ const ChatWindow = ({ localToken, activeChannel }) => {
         </div>
       )}
       <Card className="flex-grow-1 rounded-0 border-0 d-flex flex-column">
-          <Card.Body className="overflow-auto" style={{ maxHeight: '79vh' }}>
-            {filteredMessages.map((message) => (
-              <div key={message.id} className="mb-2" style={{ wordWrap: 'break-word'}}>
-                <strong>{message.username}:</strong> {message.body}
-              </div>
-            ))}
-            <div ref={messagesEndRef} /> 
-          </Card.Body>
-        </Card>
-        
-        <MessageForm localToken={localToken} activeChannel={activeChannel} />
+        <Card.Body className="overflow-auto" style={{ maxHeight: '79vh' }}>
+          {filteredMessages.map((message) => (
+            <div key={message.id} className="mb-2" style={{ wordWrap: 'break-word'}}>
+              <strong>{message.username}:</strong> {message.body}
+            </div>
+          ))}
+          <div ref={messagesEndRef} /> 
+        </Card.Body>
+      </Card>
+      <MessageForm />
     </>
   );
 };

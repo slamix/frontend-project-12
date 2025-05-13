@@ -3,43 +3,45 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import filter from "../../utils/profanityFilter.js";
+import { closeModalRenameChat } from "../../slices/modalsSlice.js";
 
-const RenameModal = ({ opened, setOpened, channel }) => {
+const RenameModal = ({ channel }) => {
   const [disabled, setDisabled] = useState(false);
-  const channels = useSelector((state) => state.channels.channels);
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const notify = () => toast.success(t('notifications.renamed'));
+  const token = useSelector((state) => state.auth.user.token);
+  const channels = useSelector((state) => state.channels.channels);
+  const modalRenameChatStatus = useSelector((state) => state.modals.modalRenameChat.status)
 
-  const validationSchema = yup.object({
-    newChannelName: yup
-      .string()
-      .required('Обязательное поле')
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .test('no-spaces', 'Обязательное поле', (value) => {
-        return value.trim().length > 0;
-      })
-      .test('unique-channel', 'Должно быть уникальным', (value) => {
-        return !channels.some((channel) => channel.name === value.trim());
-      }),
-  });
+  const notify = () => toast.success(t('notifications.renamed'));
 
   const formik = useFormik({
     initialValues: {
       newChannelName: '',
     },
-    validationSchema,
+    validationSchema: yup.object({
+      newChannelName: yup
+        .string()
+        .required(t('errors.required'))
+        .min(3, t('errors.lengthRules'))
+        .max(20, t('errors.lengthRules'))
+        .test('no-spaces', t('errors.required'), (value) => {
+          return value.trim().length > 0;
+        })
+        .test('unique-channel', t('errors.unique'), (value) => {
+          return !channels.some((channel) => channel.name === value.trim());
+        }),
+    }),
     validateOnBlur: false,
     validateOnChange: false,
     context: { channels },
     onSubmit: async (values) => {
       setDisabled(true);
-      const token = localStorage.getItem('token');
       const newChannelName = filter.clean(values.newChannelName);
       try {
         await axios.patch(`/api/v1/channels/${channel.id}`, { name: newChannelName }, {
@@ -65,19 +67,19 @@ const RenameModal = ({ opened, setOpened, channel }) => {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (opened) {
+    if (modalRenameChatStatus) {
       inputRef.current.focus();
     }
-  }, [opened]);
+  }, [modalRenameChatStatus]);
 
   const handleClose = () => {
     formik.setErrors({});
     formik.resetForm();
-    setOpened(false);
+    dispatch(closeModalRenameChat());
   }
 
   return (
-    <Modal show={opened} onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal show={modalRenameChatStatus} onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">{t('modals.renameModal.renameChannel')}</Modal.Title>
       </Modal.Header>

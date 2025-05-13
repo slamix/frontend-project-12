@@ -3,11 +3,17 @@ import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import filter from '../utils/profanityFilter.js';
 
-const MessageForm = ({ localToken, activeChannel }) => {
+const MessageForm = () => {
   const { t } = useTranslation();
   const [error, setError] = useState(null);
+
+  const username = useSelector((state) => state.auth.user.username);
+  const token = useSelector((state) => state.auth.user.token);
+  const activeChannel = useSelector((state) => state.channels.activeChannel);
+
   const formik = useFormik({
     initialValues: {
       message: '',
@@ -19,11 +25,10 @@ const MessageForm = ({ localToken, activeChannel }) => {
         return;
       }
       const channelId = activeChannel.id;
-      const username = localStorage.getItem('username');
       try {
         await axios.post('/api/v1/messages', { body: trimmedMessage, channelId, username }, {
           headers: {
-            Authorization: `Bearer ${localToken}`,
+            Authorization: `Bearer ${token}`,
           }
         });
       } catch(err) {

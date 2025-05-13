@@ -1,16 +1,15 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { ToastContainer } from 'react-toastify';
-import { addNewChannel, addChannels, removeChannel, renameChannel } from '../slices/channelsSlice.js';
-import { removeMessage } from '../slices/messagesSlice.js';
+import { addChannels, setActiveChannel } from '../slices/channelsSlice.js';
 import Header from "../components/Header.jsx";
 import ChannelsList from "../components/ChannelsList.jsx";
 import ChatWindow from "../components/ChatWindow.jsx";
-import socket from '../utils/socket.js';
+import ModalNewChat from '../components/modals/ModalNewChat.jsx';
+import useSocket from '../hooks/useSocket.js';
 
 const getChannels = async (userToken) => {
   try {
@@ -30,13 +29,11 @@ const getChannels = async (userToken) => {
 const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const localToken = localStorage.getItem('token');
-  const channels = useSelector((state) => state.channels.channels);
-  const messages = useSelector((state) => state.messages.messages);
-  
-  const [activeChannel, setActiveChannel] = useState(null);
-  const [isChannelCreator, setIsChannelCreator] = useState(false);
+  useSocket();
 
+  const localToken = useSelector((state) => state.auth.user.token);
+  //TODO CHANNELS TO CHANNELLIST
+  
   useEffect(() => {
     if (!localToken) {
       navigate('/login');
@@ -45,7 +42,7 @@ const HomePage = () => {
         try {
           const channels = await getChannels(localToken);
           dispatch(addChannels(channels));
-          setActiveChannel(channels[0]);
+          dispatch(setActiveChannel(channels[0]));
         } catch (error) {
           console.log(error);
         }
@@ -54,55 +51,19 @@ const HomePage = () => {
     }
   }, [localToken, navigate, dispatch]);
 
-  useEffect(() => {
-    socket.on('newChannel', (payload) => {
-      dispatch(addNewChannel(payload));
-      if (isChannelCreator) {
-        setActiveChannel(payload);
-        setIsChannelCreator(false);
-      }
-    });
-
-    return () => socket.off('newChannel');
-  });
-
-  useEffect(() => {
-    socket.on('removeChannel', (payload) => {
-      dispatch(removeChannel(payload));
-      messages.forEach((message) => dispatch(removeMessage(payload, message)));
-      if (payload.id === activeChannel.id) {
-        setActiveChannel(channels[0]);
-      }
-    });
-
-    return () => socket.off('removeChannel');
-  });
-
-  useEffect(() => {
-    socket.on('renameChannel', (payload) => {
-      dispatch(renameChannel(payload));
-    });
-
-    return () => socket.off('renameChannel');
-  });
-
   return (
     <Container fluid className="vh-100 d-flex flex-column p-0" style={{ overflow: "hidden" }}>
       <Header />
       <Row className="flex-grow-1">
         <Col md={3} className="bg-light p-3 border-end">
-          <ChannelsList
-            channels={channels}
-            activeChannel={activeChannel}
-            onChannelClick={setActiveChannel}
-            setIsChannelCreator={setIsChannelCreator}
-          />
+          <ChannelsList />
         </Col>
         <Col md={9} className="d-flex flex-column p-0">
-          <ChatWindow activeChannel={activeChannel} localToken={localToken} />
+          <ChatWindow />
         </Col>
       </Row>
       <ToastContainer />
+      <ModalNewChat />
     </Container>
   );
 };
