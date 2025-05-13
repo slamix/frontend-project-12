@@ -23,7 +23,7 @@ const getMessages = async (userToken) => {
 const ChatWindow = () => {
   const dispatch = useDispatch();
   
-  const token = localStorage.getItem('token');
+  const token = useSelector((state) => state.auth.user.token);
   const messages = useSelector((state) => state.messages.messages);
   const activeChannel = useSelector((state) => state.channels.activeChannel);
   const filteredMessages = messages.filter((message) => message.channelId === activeChannel?.id);
