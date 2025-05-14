@@ -89,6 +89,7 @@ const ModalNewChat = () => {
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3" controlId="newChannelName">
+            <Form.Label className="visually-hidden">{t('modals.newChatModal.channelName')}</Form.Label>
             <Form.Control
               ref={inputRef}
               id="newChannelName"

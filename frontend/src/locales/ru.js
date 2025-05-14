@@ -31,6 +31,7 @@ export default {
     },
     modals: {
       newChatModal: {
+        channelName: 'Имя канала',
         addChannel: 'Добавить канал',
         cancel: 'Отменить',
         send: 'Отправить'
