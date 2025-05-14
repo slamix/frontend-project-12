@@ -6,7 +6,7 @@ export default {
         exit: 'Выйти',
       },
       channels: 'Каналы',
-      message: 'Сообщение',
+      message: 'Введите сообщение...',
       sendButton: 'Отправить',
     },
     signupPage: {

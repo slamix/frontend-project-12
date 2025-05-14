@@ -4,22 +4,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { closeModalRemoveChat } from "../../slices/modalsSlice";
+import { closeModalRemoveChat, setCurrentChannel } from "../../slices/modalsSlice";
 
-const RemoveModal = ({ channel }) => {
+const RemoveModal = () => {
   const [disabled, setDisabled] = useState(null);
   const dispatch = useDispatch();
   const { t } = useTranslation();
   
   const token = useSelector((state) => state.auth.user.token);
+  const currentChannel = useSelector((state) => state.modals.currentChannel);
   const modalRemoveChatStatus = useSelector((state) => state.modals.modalRemoveChat.status);
 
   const notify = () => toast.success(t('notifications.deleted'));
 
+  const handleClose = () => {
+    dispatch(setCurrentChannel(null));
+    dispatch(closeModalRemoveChat());
+  }
+
   const handleDelete = async () => {
     setDisabled(true);
     try {
-      await axios.delete(`/api/v1/channels/${channel.id}`, {
+      await axios.delete(`/api/v1/channels/${currentChannel.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -29,19 +35,19 @@ const RemoveModal = ({ channel }) => {
       console.log(e);
     } finally {
       setDisabled(false);
-      dispatch(closeModalRemoveChat());
+      handleClose();
     }
   };
 
   return (
-    <Modal show={modalRemoveChatStatus} onHide={() => dispatch(closeModalRemoveChat())} aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal show={modalRemoveChatStatus} onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">{t('modals.removeModal.removeChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div>{t('modals.removeModal.confirmation')}</div>
         <div className="d-flex justify-content-end gap-2">
-          <Button variant="secondary" onClick={() => dispatch(closeModalRemoveChat())}>
+          <Button variant="secondary" onClick={handleClose}>
           {t('modals.removeModal.cancel')}
           </Button>
           <Button variant="danger" onClick={handleDelete} disabled={disabled}>

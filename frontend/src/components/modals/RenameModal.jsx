@@ -7,15 +7,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import filter from "../../utils/profanityFilter.js";
-import { closeModalRenameChat } from "../../slices/modalsSlice.js";
+import { closeModalRenameChat, setCurrentChannel } from "../../slices/modalsSlice.js";
 
-const RenameModal = ({ channel }) => {
+const RenameModal = () => {
   const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const token = useSelector((state) => state.auth.user.token);
   const channels = useSelector((state) => state.channels.channels);
+  const currentChannel = useSelector((state) => state.modals.currentChannel);
   const modalRenameChatStatus = useSelector((state) => state.modals.modalRenameChat.status)
 
   const notify = () => toast.success(t('notifications.renamed'));
@@ -44,7 +45,7 @@ const RenameModal = ({ channel }) => {
       setDisabled(true);
       const newChannelName = filter.clean(values.newChannelName);
       try {
-        await axios.patch(`/api/v1/channels/${channel.id}`, { name: newChannelName }, {
+        await axios.patch(`/api/v1/channels/${currentChannel.id}`, { name: newChannelName }, {
           headers: {
             Authorization: `Bearer ${token}`,
           }
@@ -75,6 +76,7 @@ const RenameModal = ({ channel }) => {
   const handleClose = () => {
     formik.setErrors({});
     formik.resetForm();
+    dispatch(setCurrentChannel());
     dispatch(closeModalRenameChat());
   }
 

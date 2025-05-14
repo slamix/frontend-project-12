@@ -6,11 +6,10 @@ import RemovableChannel from './channels/RemovableChannel.jsx';
 import UnremovableChannel from './channels/UnremovableChannel.jsx';
 import { openModalNewChat } from '../slices/modalsSlice.js';
 
-const ChannelList = () => {
+const ChannelList = ({ channels }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const activeChannel = useSelector((state) => state.channels.activeChannel);
-  const channels = useSelector((state) => state.channels.channels);
   
   const handleShow = () => dispatch(openModalNewChat());
 

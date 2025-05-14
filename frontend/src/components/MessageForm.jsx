@@ -63,6 +63,7 @@ const MessageForm = () => {
           as="textarea"
           rows={2}
           placeholder={t('homepage.message')}
+          aria-label='Новое сообщение'
           style={{ resize: 'none' }}
           id="message"
           name="message"

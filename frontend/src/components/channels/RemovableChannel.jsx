@@ -1,10 +1,8 @@
 import { Button, Dropdown, } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import RemoveModal from "../modals/RemoveModal";
-import RenameModal from "../modals/RenameModal";
 import { setActiveChannel } from "../../slices/channelsSlice";
-import { openModalRemoveChat, openModalRenameChat } from "../../slices/modalsSlice";
+import { openModalRemoveChat, openModalRenameChat, setCurrentChannel } from "../../slices/modalsSlice";
 
 
 const RemovableChannel = ({ channel, isActive }) => {
@@ -13,6 +11,11 @@ const RemovableChannel = ({ channel, isActive }) => {
 
   const handleSetActive = (channel) => {
     dispatch(setActiveChannel(channel));
+  }
+
+  const handleClick = (openModalFunc) => {
+    dispatch(setCurrentChannel(channel));
+    dispatch(openModalFunc());
   }
 
   return (
@@ -34,14 +37,11 @@ const RemovableChannel = ({ channel, isActive }) => {
             variant={isActive ? 'primary' : 'light'}
             className={`rounded-0 border-start-0 ${isActive ? 'text-white' : ''}`}
           />
-          
           <Dropdown.Menu>
-            <Dropdown.Item eventKey="1" onClick={() => dispatch(openModalRemoveChat())} active={false}>{t('remove')}</Dropdown.Item>
-            <Dropdown.Item eventKey="2" onClick={() => dispatch(openModalRenameChat())} active={false}>{t('rename')}</Dropdown.Item>
+            <Dropdown.Item eventKey="1" onClick={() => handleClick(openModalRemoveChat)} active={false}>{t('remove')}</Dropdown.Item>
+            <Dropdown.Item eventKey="2" onClick={() => handleClick(openModalRenameChat)} active={false}>{t('rename')}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <RemoveModal channel={channel} />
-        <RenameModal channel={channel} />
     </div>
   );
 };

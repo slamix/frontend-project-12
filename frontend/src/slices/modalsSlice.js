@@ -10,6 +10,7 @@ const initialState = {
   modalRenameChat: {
     status: false,
   },
+  currentChannel: null,
 };
 
 const modalsSlice = createSlice({
@@ -34,6 +35,9 @@ const modalsSlice = createSlice({
     closeModalRenameChat: (state) => {
       state.modalRenameChat.status = false;
     },
+    setCurrentChannel: (state, { payload }) => {
+      state.currentChannel = payload;
+    }
   }
 });
 
@@ -43,7 +47,8 @@ export const {
   openModalRemoveChat,
   closeModalRemoveChat,
   openModalRenameChat, 
-  closeModalRenameChat 
+  closeModalRenameChat,
+  setCurrentChannel, 
 } = modalsSlice.actions;
 
 export default modalsSlice.reducer;
