@@ -36,7 +36,9 @@ const RemovableChannel = ({ channel, isActive }) => {
           <Dropdown.Toggle
             variant={isActive ? 'primary' : 'light'}
             className={`rounded-0 border-start-0 ${isActive ? 'text-white' : ''}`}
-          />
+          >
+            <span className="visually-hidden">{t('modals.controlChannel')}</span>
+          </Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item eventKey="1" onClick={() => handleClick(openModalRemoveChat)} active={false}>{t('remove')}</Dropdown.Item>
             <Dropdown.Item eventKey="2" onClick={() => handleClick(openModalRenameChat)} active={false}>{t('rename')}</Dropdown.Item>

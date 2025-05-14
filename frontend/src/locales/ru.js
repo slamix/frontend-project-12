@@ -30,6 +30,7 @@ export default {
       toHome: 'На главную',
     },
     modals: {
+      controlChannel: 'Управление каналом',
       newChatModal: {
         channelName: 'Имя канала',
         addChannel: 'Добавить канал',
