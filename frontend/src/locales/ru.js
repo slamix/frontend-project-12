@@ -35,7 +35,7 @@ export default {
         channelName: 'Имя канала',
         addChannel: 'Добавить канал',
         cancel: 'Отменить',
-        send: 'Отправить'
+        send: 'Отправить',
       },
       removeModal: {
         removeChannel: 'Удалить канал',
@@ -68,5 +68,5 @@ export default {
     password: 'Пароль',
     remove: 'Удалить',
     rename: 'Переименовать',
-  }
+  },
 }

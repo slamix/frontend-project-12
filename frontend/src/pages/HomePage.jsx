@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";

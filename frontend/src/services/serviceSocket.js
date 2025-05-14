@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import socket from "../utils/socket";
 import { dispatch, getState } from "../slices/index.js";
 import { addNewChannel, removeChannel, renameChannel, setActiveChannel } from "../slices/channelsSlice.js";

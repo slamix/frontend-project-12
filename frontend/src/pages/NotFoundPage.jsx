@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Container, Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

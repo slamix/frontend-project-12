@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";

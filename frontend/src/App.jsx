@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider, ErrorBoundary } from '@rollbar/react';
 

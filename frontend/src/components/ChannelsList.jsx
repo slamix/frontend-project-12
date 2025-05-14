@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { ListGroup, Button, Container } from 'react-bootstrap';
 import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';

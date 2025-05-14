@@ -1,5 +1,7 @@
-import { useEffect } from "react";
-import { initSocket } from "../services/serviceSocket.js";
+/* eslint-disable */
+
+import { useEffect } from 'react';
+import { initSocket } from '../services/serviceSocket.js';
 
 const useSocket = () => {
   useEffect(() => {

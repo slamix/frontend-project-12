@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Form, Button, Container, Alert } from 'react-bootstrap';

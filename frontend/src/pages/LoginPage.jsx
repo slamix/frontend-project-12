@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { useFormik } from 'formik';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';

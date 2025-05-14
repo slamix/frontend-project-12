@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Card } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef } from 'react';

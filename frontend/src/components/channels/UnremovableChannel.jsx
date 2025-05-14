@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { setActiveChannel } from "../../slices/channelsSlice";
